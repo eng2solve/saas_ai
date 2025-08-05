@@ -1,0 +1,23 @@
+/* importing google font outline */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap'); 
+
+/* importing tailwindcss */
+@import "tailwindcss";
+
+/* applying the google font to all the page */
+*{
+  font-family: "Outfit", sans-serif;
+ }
+
+ /* creating a theme color */
+ @theme{
+  --color-primary:#5044e5;
+ }
+
+ .reset-tw, .reset-tw *{
+  all:revert !important
+ }
+
+ .cl-drawerRoot{
+  z-index:10
+ }
