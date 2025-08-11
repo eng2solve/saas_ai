@@ -11,9 +11,10 @@ const app = express();
 await connectCloudinary();
 
 app.use(cors());
-app.use(clerkMiddleware());
+app.use(clerkMiddleware()); // this will add auth request in request to get user data and plan
 app.use(express.json());
 
+//home routes
 app.get("/", (req, res) => {
   //adding the route for the home page
   res.send("Server is running");

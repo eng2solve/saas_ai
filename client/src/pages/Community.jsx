@@ -1,14 +1,64 @@
 import { useUser } from "@clerk/clerk-react";
-import React, { useEffect, useState } from "react";
-import { dummyPublishedCreationData } from "../assets/assets";
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
+import axios from "axios";
+import { useAuth } from "@clerk/clerk-react";
+import toast from "react-hot-toast";
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const Community = () => {
   const [creations, setCreations] = useState([]);
-  const { user } = useUser();
+  const [loading, setLoadinng] = useState(false);
 
+  const { user } = useUser();
+  const { getToken } = useAuth();
+
+  console.log(creations);
   const fetchCreation = async () => {
-    setCreations(dummyPublishedCreationData);
+    try {
+      setLoadinng(true);
+      const token = await getToken();
+      const { data } = await axios.get("/api/user/get-publish-creations", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        setCreations(data.creations);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+    setLoadinng(false);
+  };
+
+  const toggleImageLike = async (creationId) => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        "/api/user/toggle-like-creation",
+        { creationId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        await fetchCreation(); // refetching the creations after liking/unliking
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+    setLoadinng(false);
   };
 
   useEffect(() => {
@@ -30,13 +80,24 @@ const Community = () => {
               alt={creation.title}
               className="w-full h-full object-cover rounded-lg"
             />
-            <div className="absolute bottom-0 top-0 right-0 left-3  flex items-end justify-end group-hover:justify-between 
-            p-3 group-hover:bg-gradient-to-b from-transparent to-black/80 text-white gap-2 rounded-lg">
-              <p className="text-sm hidden group-hover:block">{creation.prompt}</p>
+            <div
+              className="absolute bottom-0 top-0 right-0 left-3  flex items-end justify-end group-hover:justify-between 
+            p-3 group-hover:bg-gradient-to-b from-transparent to-black/80 text-white gap-2 rounded-lg"
+            >
+              <p className="text-sm hidden group-hover:block">
+                {creation.prompt}
+              </p>
               <div className="flex items-center gap-1">
                 <p>{creation.likes.length}</p>
-                <Heart className={`min-w-5 h-5 hover:scale-110 cursor-pointer 
-                  ${creation.likes.includes(user.id)?'fill-red-500 text-red-600':'text-white'}`} />
+                <Heart
+                  onClick={() => toggleImageLike(creation.id)}
+                  className={`min-w-5 h-5 hover:scale-110 cursor-pointer 
+                  ${
+                    creation.likes.includes(user.id)
+                      ? "fill-red-500 text-red-600"
+                      : "text-white"
+                  }`}
+                />
               </div>
             </div>
           </div>

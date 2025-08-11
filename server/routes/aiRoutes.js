@@ -4,7 +4,7 @@ import {
   generateArticle,
   generateBlogTitle,
   generateImage,
-  removeImageackground,
+  removeImageBackground,
   removeObject,
   resumeReview,
 } from "../controllers/aiController.js";
@@ -19,7 +19,7 @@ aiRouter.post(
   "/remove-image-background",
   upload.single("image"),
   auth,
-  removeImageackground
+  removeImageBackground
 );
 aiRouter.post(
   "/remove-image-object",
