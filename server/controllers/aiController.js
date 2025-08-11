@@ -20,7 +20,7 @@ export const generateArticle = async (req, res) => {
     const plan = req.plan;
     const free_usage = req.free_usage;
 
-    if (plan !== "premium" && free_usage >= 10) {
+    if (plan !== "premium" && free_usage >= 4) {
       return res.json({
         success: false,
         message:
@@ -46,15 +46,16 @@ export const generateArticle = async (req, res) => {
 
     await sql`INSERT INTO creations (user_id, prompt,content, type) 
     VALUES (${userId}, ${prompt},${content},'article')`;
+    res.json({ success: true, content });
 
     if (plan !== "premium") {
       await clerkClient.users.updateUserMetadata(userId, {
         privateMetadata: {
-          free_usage: free_usage + 1, // inecrement
+          free_usage: free_usage + 1, // increment
         },
       });
     }
-    res.json({ sucess: true, content });
+
   } catch (error) {
     console.error("Error generating article:", error.message);
     res.json({ success: false, message: error.message });
@@ -102,7 +103,7 @@ export const generateBlogTitle = async (req, res) => {
         },
       });
     }
-    res.json({ sucess: true, content });
+    res.json({ success: true, content });
   } catch (error) {
     console.error("Error generating blog title:", error.message);
     res.json({ success: false, message: error.message });
@@ -150,17 +151,17 @@ export const generateImage = async (req, res) => {
     await sql`INSERT INTO creations (user_id, prompt,content, type,publish) 
     VALUES (${userId}, ${prompt},${secure_url},'image',${publish ?? false})`;
 
-    res.json({ sucess: true, content: secure_url });
+    res.json({ success: true, content: secure_url });
   } catch (error) {
     console.error("Error generating image:", error.message);
     res.json({ success: false, message: error.message });
   }
 };
 
-export const removeImageackground = async (req, res) => {
+export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { image } = req.file; // the image will be added using multter midelware
+    const image  = req.file; // the image will be added using multter midelware
     const plan = req.plan;
 
     //it is only for premium users
@@ -181,10 +182,11 @@ export const removeImageackground = async (req, res) => {
     });
 
     //storing the url in database
-    await sql`INSERT INTO creations (user_id, prompt,content, type,) 
-    VALUES (${userId}, 'remove background from image' ,${secure_url},'image')`;
+    await sql`INSERT INTO creations (user_id, prompt,content, type) 
+    VALUES (${userId}, 'Remove background from image' ,${secure_url},'image')`;
 
-    res.json({ sucess: true, content: secure_url });
+    res.json({ success: true, content: secure_url });
+
   } catch (error) {
     console.error("Error while removing background:", error.message);
     res.json({ success: false, message: error.message });
@@ -195,7 +197,7 @@ export const removeObject = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { object } = req.body;
-    const { image } = req.file; // the image will be added using multter midelware
+    const image = req.file; // the image will be added using multter midelware
     const plan = req.plan;
 
     //it is only for premium users
@@ -209,21 +211,21 @@ export const removeObject = async (req, res) => {
     const { public_id } = await cloudinary.uploader.upload(image.path);
 
     const imageUrl = cloudinary.url(public_id, {
-      resource_type: "image",
       transformation: [
         {
           effect: `gen_remove:${object}`,
         },
       ],
+
+      resource_type: "image",
     });
 
     //storing the url in database
-    await sql`INSERT INTO creations (user_id, prompt,content, type,) 
+    await sql`INSERT INTO creations (user_id, prompt,content, type) 
     VALUES (${userId}, ${`Remove ${object} from the image`} ,${imageUrl},'image')`;
 
-    res.json({ sucess: true, content: imageUrl });
+    res.json({ success: true, content: imageUrl });
   } catch (error) {
-    console.error("Error while removing object:", error.message);
     res.json({ success: false, message: error.message });
   }
 };
@@ -231,7 +233,7 @@ export const removeObject = async (req, res) => {
 export const resumeReview = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { resume } = req.file;
+    const resume  = req.file;
     const plan = req.plan;
 
     //it is only for premium users
@@ -272,12 +274,11 @@ export const resumeReview = async (req, res) => {
     });
 
     const content = response.choices[0].message.content;
-
-    //storing the url in database
-    await sql`INSERT INTO creations (user_id, prompt,content, type,) 
+    
+    await sql`INSERT INTO creations (user_id, prompt,content, type) 
     VALUES (${userId}, 'Review the uploaded resume' ,${content},'resume-review')`;
 
-    res.json({ sucess: true, content });
+    res.json({ success: true, content });
   } catch (error) {
     console.error("Error while removing object:", error.message);
     res.json({ success: false, message: error.message });
