@@ -53,16 +53,17 @@ export const toggleLikeCreation = async (req, res) => {
     if (currentLikes.includes(userIdString)) {
       //if user already liked the creation
       updatedLikes = currentLikes.filter((user) => user !== userIdString);
-      message = "Creation unliked.";
+      message = "Creation Unliked.";
     } else {
       //if user not liked the creation
       updatedLikes = [...currentLikes, userIdString];
-      message = "Creation liked successfully.";
+      message = "Creation liked.";
     }
 
     const formattedArray = `{${updatedLikes.join(",")}}`;
     //updating the likes in database
     await sql`UPDATE creations SET likes=${formattedArray}::text[] WHERE id=${creationId}`;
+    res.json({ success: true, message });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }

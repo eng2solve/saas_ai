@@ -3,13 +3,36 @@ import { dummyCreationData } from "../assets/assets";
 import { Gem, Sparkle, Sparkles } from "lucide-react";
 import { Protect } from "@clerk/clerk-react";
 import CreationItem from "../components/CreationItem";
+import axios from "axios";
+import { useAuth } from "@clerk/clerk-react";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const [creations, setCreations] = useState([]);
+    const [loading, setLoadinng] = useState(false);
+
+  const { getToken } = useAuth();
 
   const getDashboardData = async () => {
-    setCreations(dummyCreationData);
-  };
+   try {
+         setLoadinng(true);
+         const token = await getToken();
+         const { data } = await axios.get("/api/user/get-user-creations", {
+           headers: {
+             Authorization: `Bearer ${token}`,
+           },
+         });
+   
+         if (data.success) {
+           setCreations(data.creations);
+         } else {
+           toast.error(data.message);
+         }
+       } catch (error) {
+         toast.error(error.message);
+       }
+       setLoadinng(false);
+     };
 
   useEffect(() => {
     getDashboardData();
@@ -47,12 +70,15 @@ const Dashboard = () => {
       </div>
 
       {/* list of creation */}
-      <div className="space-y-3">
+      {loading?(<div className="flex justify-center items-center h-full">
+           <span className="w-4 h-4 mu-1 rounded-full border-2 border-t-transparent animate-spin"></span>
+              </div>):(<div className="space-y-3">
         <p className="mt-6 mb-4">Recent Creations</p>
         {creations.map((item) => (
           <CreationItem key={item.id} item={item} />
         ))}
-      </div>
+      </div>)}
+      
     </div>
   );
 };
