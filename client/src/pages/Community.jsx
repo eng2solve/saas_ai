@@ -14,7 +14,6 @@ const Community = () => {
   const { user } = useUser();
   const { getToken } = useAuth();
 
-  console.log(creations);
   const fetchCreation = async () => {
     try {
       setLoadinng(true);
@@ -26,6 +25,7 @@ const Community = () => {
       });
 
       if (data.success) {
+        console.log("relike")
         setCreations(data.creations);
       } else {
         toast.error(data.message);
@@ -37,8 +37,10 @@ const Community = () => {
   };
 
   const toggleImageLike = async (creationId) => {
+    console.log(creationId)
     try {
       const token = await getToken();
+      
       const { data } = await axios.post(
         "/api/user/toggle-like-creation",
         { creationId },
@@ -48,10 +50,11 @@ const Community = () => {
           },
         }
       );
-
+      console.log("data",data);
       if (data.success) {
+        console.log("toggle like")
         toast.success(data.message);
-        await fetchCreation(); // refetching the creations after liking/unliking
+        fetchCreation(); // refetching the creations after liking/unliking
       } else {
         toast.error(data.message);
       }
@@ -66,7 +69,8 @@ const Community = () => {
       fetchCreation();
     }
   }, [user]);
-  return (
+
+  return !loading? (
     <div className="flex-1 h-full flex flex-col gap-4 p-6">
       Creations
       <div className="bg-white h-full w-full rounded-xl overflow-y-scrpll">
@@ -104,6 +108,10 @@ const Community = () => {
         ))}
       </div>
     </div>
+  ):(
+     <div className="flex justify-center items-center h-full">
+           <span className="w-4 h-4 mu-1 rounded-full border-2 border-t-transparent animate-spin"></span>
+              </div>
   );
 };
 
