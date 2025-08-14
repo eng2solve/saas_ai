@@ -13,7 +13,7 @@ const Layout = () => {
   return user?(
     <div className="flex flex-col items-start justify-start h-screen">
       <nav className="w-full px-8 min-h-14 flex items-center justify-between border-b border-gray-200">
-        <img src={assets.logo} alt="" onClick={() => navigate("/")} className="cursor-pointer w-32 sm:w-44" />
+        <img src={assets.logo} alt="" onClick={() => navigate("/")} className="cursor-pointer p-2 w-32 sm:w-44" />
         {sidebar ? (
           <X
             onClick={() => setSidebar(false)}
@@ -26,7 +26,7 @@ const Layout = () => {
           />
         )}
       </nav>
-      <div className="flex-1 w-full flex h-[calc(100vh-64px)]]">
+      <div className="flex-1 w-full flex h-[calc(100vh-20px)]]">
         <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
         <div className="flex-1 bg-[#F4f7fb]">
           <Outlet />

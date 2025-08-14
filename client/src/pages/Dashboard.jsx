@@ -39,7 +39,7 @@ const Dashboard = () => {
   }, []);
   
   return (
-    <div className="h-full overflow-y-scroll p-6">
+    <div className="h-[100vh] overflow-y-scroll p-6">
       <div className="flex justify-star gap-4 flex-wrap">
         {/* total creation card */}
         <div className="flex justify-between items-center w-72 p-4 px-6      bg-white rounded-xl border border-gray-200">

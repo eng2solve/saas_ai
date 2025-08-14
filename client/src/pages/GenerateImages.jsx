@@ -76,7 +76,7 @@ const GenerateImages = () => {
           type="text"
           row={6}
           className="w-full p-2 px-3 mt-2 outline-none text-sm rounded-md border border-gray-300"
-          placeholder="Describe the image what you whant too see..."
+          placeholder="Describe the image what you want too see..."
           required
         ></textarea>
         <p className="mt-4 text-sm font-medium">Style</p>
@@ -110,7 +110,7 @@ const GenerateImages = () => {
           <p className="text-sm">Make this image Public</p>
         </div>
         <button
-          disable={loading}
+          disabled={loading}
           className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#3C81F6] to-[#3465ea] text-white px-4 py-2 mt-2 text-sm rounded-lg cursor-pointer"
         >
           {loading ? (
