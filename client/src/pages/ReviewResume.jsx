@@ -72,7 +72,7 @@ const ReviewResume = () => {
           Supports PDF resume only.
         </p>
         <button
-          disable={loading}
+          disabled={loading}
           className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#3C81F6] to-[#3465ea] text-white px-4 py-2 mt-4 text-sm rounded-lg cursor-pointer"
         >
           {loading ? (

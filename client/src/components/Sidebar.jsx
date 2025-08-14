@@ -4,7 +4,7 @@ import React from "react";
 import {NavLink} from 'react-router-dom'
 
 const navItems = [
-  { to: "/ai", lable: "dashboard", Icon: Home },
+  { to: "/ai", lable: "Dashboard", Icon: Home },
   { to: "/ai/write-article", lable: "Write Article", Icon: Pen },
   { to: "/ai/blog-titles", lable: "Blog Titles", Icon: Hash },
   { to: "/ai/generate-images", lable: "Generate Images", Icon: Image },
@@ -29,7 +29,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
         {/* <img
           src={user.imageUrl}
           alt="username"
-          className="w-11 h-12 rounded-full mx-auto"
+          className="w-7 h-7 rounded-full mx-auto"
         />
         <h1 className="mt-1 text-center">{user.fullName}</h1> */}
         <div className="px-2 text-sm text-gray-600 font-medium">
@@ -58,7 +58,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
       </div>
       <div className='w-full border-t border-gray-200 p-4 px-7 flex items-center justify-between'>
         <div onClick={openUserProfile} className="flex gap-2 items-center cursor-pointer">
-        <img src={user.imageUrl} alt="userImage" className="w-11 h-12 rounded-full mx-auto" />
+        <img src={user.imageUrl} alt="userImage" className="w-7 h-8 rounded-full mx-auto" />
         <div>
           <h1 className="text-sm font-medium">
             {user.fullName}

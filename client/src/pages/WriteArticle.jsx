@@ -88,7 +88,7 @@ const WriteArticle = () => {
           ))}
         </div>
         <br />
-        <button  disable={loading} className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#3C81F6] to-[#3465ea] text-white px-4 py-2 mt-2 text-sm rounded-lg cursor-pointer">
+        <button  disabled={loading} className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#3C81F6] to-[#3465ea] text-white px-4 py-2 mt-2 text-sm rounded-lg cursor-pointer">
           {loading? <span className="w-4 h-4 mu-1 rounded-full border-2 border-t-transparent animate-spin"></span>:<Edit className="w-5" />
           }
           Generate article
